@@ -40,3 +40,7 @@ ROOT_STANDARD_LIBRARY_PACKAGE(Physics
   DICTIONARY_OPTIONS
     -writeEmptyRootPCM
 )
+
+if(testing)
+  add_subdirectory(test)
+endif()
