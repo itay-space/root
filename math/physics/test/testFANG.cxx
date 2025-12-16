@@ -27,7 +27,7 @@
 #include "TFANG.h"
 
 #include "gtest/gtest.h"
-
+#include "TError.h"
 #include "TRandom.h"
 #include "TMath.h"
 #include "Math/Vector3D.h"
@@ -113,14 +113,14 @@ TEST_F(FANGTest, TwoBody_PhysicalMomenta)
 ////////////////////////////////////////////////////////////////////////////////
 /// \brief Test GenFANG full phase space with known reference value
 ///
-/// Uses P(0,0,5,13) decaying to 5 particles of mass 1 each.
+/// Uses P(0,0,5,M=12) decaying to 5 particles of mass 1 each.
 /// Reference value from FANG paper Table I: 26628.1 ± 3.0
 ////////////////////////////////////////////////////////////////////////////////
 TEST_F(FANGTest, FullPhaseSpace_ReferenceValue)
 {
    const Int_t kNBody = 5;
    Double_t masses[kNBody] = {1.0, 1.0, 1.0, 1.0, 1.0};
-   ROOT::Math::PxPyPzMVector pTotal(0, 0, 5, 13);  // Note: E=13 as in paper
+   ROOT::Math::PxPyPzMVector pTotal(0, 0, 5, 12);  // Note: E=13 as in paper
 
    std::vector<ROOT::Math::XYZVector> v3Det;
    std::vector<std::vector<ROOT::Math::PxPyPzMVector>> vecVecP;
@@ -516,6 +516,10 @@ TEST_F(FANGTest, Rosenbluth_HighPrecision)
 ////////////////////////////////////////////////////////////////////////////////
 TEST_F(FANGTest, UnphysicalConfiguration)
 {
+    // Temporarily suppress error messages since we expect an error condition
+   Int_t oldLevel = gErrorIgnoreLevel;
+   gErrorIgnoreLevel = kFatal;  // Only show Fatal messages
+
    const Int_t kNBody = 3;
    Double_t masses[kNBody] = {5.0, 5.0, 5.0};  // Total mass = 15
    ROOT::Math::PxPyPzMVector pTotal(0, 0, 0, 10);  // M = 10 < 15, unphysical
@@ -528,6 +532,8 @@ TEST_F(FANGTest, UnphysicalConfiguration)
    Double_t shape[1];
 
    Int_t status = GenFANG(kNBody, pTotal, masses, omega, shape, v3Det, vecVecP, vecWi);
+
+   gErrorIgnoreLevel = oldLevel;  // Restore previous error level
    EXPECT_EQ(status, 0) << "GenFANG should fail for unphysical mass configuration";
 }
 
