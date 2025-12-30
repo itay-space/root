@@ -1,11 +1,11 @@
 // @(#)root/fang:$Id$
-// Author: Arik Kreisel
+// Author: Arik Kreisel, Itay Horin
 
 ////////////////////////////////////////////////////////////////////////////////
 /// \file exampleFANG.C
 /// \ingroup Physics
 /// \brief Demonstration and validation of FANG (Focused Angular N-body event Generator)
-/// \author Arik Kreisel
+/// \author Arik Kreisel, Itay Horin
 ///
 /// This file contains:
 /// 1. Rosenbluth cross section function for elastic ep scattering
@@ -529,15 +529,15 @@ void runFANG()
    //==========================================================================
    // FANG Point Generation: Differential Cross Section at Specific Angles
    //==========================================================================
-   Double_t sigmaArr[11];
-   Double_t sigmaErrArr[11];
-   Double_t cosThetaArr[11];
-   Double_t cosThetaErrArr[11];
+   Double_t sigmaArr[9];
+   Double_t sigmaErrArr[9];
+   Double_t cosThetaArr[9];
+   Double_t cosThetaErrArr[9];
    Double_t cosTheta;
 
    std::cout << "\nCalculating differential cross section at specific angles:" << std::endl;
 
-   for (Int_t l = 0; l < 11; l++) {
+   for (Int_t l = 0; l < 9; l++) {
       ampSquared = 0.0;
       weight = 0.0;
       sumW = 0.0;
@@ -545,7 +545,7 @@ void runFANG()
       nEvents = 0;
       v3Det.clear();
 
-      cosTheta = -1.0 + l * 0.2;
+      cosTheta = -0.8 + l * 0.2;
       if (l == 10) cosTheta = 0.95;
       cosThetaArr[l] = cosTheta;
       cosThetaErrArr[l] = 0.0;
